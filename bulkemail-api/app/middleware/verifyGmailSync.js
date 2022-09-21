@@ -19,13 +19,11 @@ checkGmailSync = (req, res, next) => {
   // verify connection configuration
   transporter.verify(function (error, success) {
     if (error) {
-      console.log(error);
       res.status(400).send({
         message: 'Error! Please check your gmail account configuration.'
       });
       return;
     } else {
-      console.log(success);
       console.log("Server is ready to take our messages");
       next();
     }

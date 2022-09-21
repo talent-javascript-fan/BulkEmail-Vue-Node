@@ -2,14 +2,14 @@ const db = require("../models");
 const ROLES = db.ROLES;
 const Email = db.email;
 
-checkDuplicateEmail = (req, res, next) => {
-  // Email
-  Email.findOne({
-    where: {
-      email: req.body.email,
-      user_id: req.body.user_id
-    }
-  }).then(user => {
+checkDuplicateEmail = async (req, res, next) => {
+  try {
+    const user = await Email.findOne({
+      where: {
+        email: req.body.email,
+        user_id: req.body.user_id
+      }
+    })
     if (user) {
       res.status(400).send({
         message: "Failed! Email is already in use!"
@@ -17,7 +17,12 @@ checkDuplicateEmail = (req, res, next) => {
       return;
     }
     next();
-  });
+  } catch (error) {
+    res.status(500).send({
+      message: error
+    });
+    return;
+  }
 };
 
 const verifyAddEmail = {
